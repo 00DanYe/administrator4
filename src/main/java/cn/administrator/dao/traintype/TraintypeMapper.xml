@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.administrator.dao.traintype.TraintypeMapper">
+    <resultMap id="traintype" type="cn.administrator.pojo.Traintype">
+        <result property="typeName" column="type_name"/>
+        <result property="typeCode" column="type_code"/>
+        <result property="typeInfo" column="type_info"/>
+    </resultMap>
+    <insert id="add">
+        insert into traintype(type_name, type_code, type_info)
+        value (#{typeName},#{typeCode},#{typeInfo});
+    </insert>
+    <select id="getAllTraintype" resultMap="traintype">
+        select * from traintype
+    </select>
+    <select id="getTraintypeByName" resultMap="traintype">
+        select * from traintype where type_name=#{typeName}
+    </select>
+    <select id="getTraintypeByCode" resultMap="traintype">
+        select * from traintype where type_code=#{typeCode}
+    </select>
+</mapper>

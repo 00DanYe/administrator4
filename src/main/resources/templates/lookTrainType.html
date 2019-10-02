@@ -1,0 +1,425 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace ="common/head :: head"></div>
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script>
+  $(document).ready(function () {
+        $("#page").show();
+
+      var basePath = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/
+
+        $.ajax({
+           url:"/train/lookTrainType.do",
+            type:"get",
+            dataType:"json",
+            success:function (data) {
+                $("tbody").html("");
+                if(data.pageNum<=1){
+                    $("#previousPage").hide();
+                }else {
+                    $("#previousPage").show();
+                }
+                if(data.pageNum>=data.numberPage){
+                    $("#nextPage").hide();
+                }else {
+                    $("#nextPage").show();
+                }
+                $("#nextPage").attr("page",data.pageNum);
+                $("#previousPage").attr("page",data.pageNum);
+                $("#show1").html(data.pageNum);
+                $("#show2").html(data.numberPage);
+                $("#tbody").html("");
+                for(var i=0;i<data.trains.length;i++){
+                    $("tbody").append("<tr>" +
+                        "<th class=\"table-title\">"+data.trains[i].trainName+"</th>" +
+                        "<th class=\"table-title\">"+data.trains[i].traintype.typeName+"</th>" +
+                        "<th class=\"table-type\">"+data.trains[i].trainExpense+"</th>" +
+                        "<th class=\"table-type\">"+data.trains[i].trainHost+"</th>" +
+                        "<th class=\"table-type\">"+data.trains[i].trainMaster+"</th>" +
+                        "<td class=\"am-hide-sm-only\">"+data.trains[i].trainLocation+"</td>"+
+                        "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainBtime+"</th>" +
+                        "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainEtime+"</th>" +
+                        "<th class=\"table-set\"> " +
+                        "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary\">" +
+                        " <a href='/train/traininfo.html/"+data.trains[i].trainId+"' class=\"am-icon-pencil-square-o\">查看</a>" +
+                        "  </button></th>" +
+                        "</tr>");
+                }
+            }
+        })
+        $("select[name=typeName]").on("change",function () {
+            $.ajax({
+                url:"/train/lookTrainType.do",
+                type:"get",
+                data:{"typeName":$(this).val(),
+                        "status":$("select[name=status]").val(),
+                        "trainName":$("#trainName").val()},
+                dataType:"json",
+                success:function (data) {
+                    if(data.pageNum<=1){
+                        $("#previousPage").hide();
+                    }else {
+                        $("#previousPage").show();
+                    }
+                    if(data.pageNum>=data.numberPage){
+                        $("#nextPage").hide();
+                    }else {
+                        $("#nextPage").show();
+                    }
+                    $("#nextPage").attr("page",data.pageNum);
+                    $("#previousPage").attr("page",data.pageNum);
+                    $("#show1").html(data.pageNum);
+                    $("#show2").html(data.numberPage);
+                    $("tbody").html("");
+                    for(var i=0;i<data.trains.length;i++){
+                        $("tbody").append("<tr>" +
+                            "<th class=\"table-title\">"+data.trains[i].trainName+"</th>" +
+                            "<th class=\"table-title\">"+data.trains[i].traintype.typeName+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainExpense+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainHost+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainMaster+"</th>" +
+                            "<td class=\"am-hide-sm-only\">"+data.trains[i].trainLocation+"</td>"+
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainBtime+"</th>" +
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainEtime+"</th>" +
+                            "<th class=\"table-set\"> " +
+                            "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary\">" +
+                            " <a href='/train/traininfo.html/"+data.trains[i].trainId+"' class=\"am-icon-pencil-square-o\">查看</a>" +
+                            "  </button></th>" +
+                            "</tr>");
+                     }
+                }
+            })
+        })
+        $("select[name=status]").on("change",function () {
+            $.ajax({
+                url:"/train/lookTrainType.do",
+                type:"get",
+                data:{"typeName":$("select[name=typeName]").val(),
+                    "status":$(this).val(),
+                    "trainName":$("#trainName").val()},
+                dataType:"json",
+                success:function (data) {
+                    if(data.pageNum<=1){
+                        $("#previousPage").hide();
+                    }else {
+                        $("#previousPage").show();
+                    }
+                    if(data.pageNum>=data.numberPage){
+                        $("#nextPage").hide();
+                    }else {
+                        $("#nextPage").show();
+                    }
+                    $("#nextPage").attr("page",data.pageNum);
+                    $("#previousPage").attr("page",data.pageNum);
+                    $("#show1").html(data.pageNum);
+                    $("#show2").html(data.numberPage);
+                    $("tbody").html("");
+                    for(var i=0;i<data.trains.length;i++){
+                        $("tbody").append("<tr>" +
+                            "<th class=\"table-title\">"+data.trains[i].trainName+"</th>" +
+                            "<th class=\"table-title\">"+data.trains[i].traintype.typeName+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainExpense+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainHost+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainMaster+"</th>" +
+                            "<td class=\"am-hide-sm-only\">"+data.trains[i].trainLocation+"</td>"+
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainBtime+"</th>" +
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainEtime+"</th>" +
+                            "<th class=\"table-set\"> " +
+                            "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary\">" +
+                            " <a href='/train/traininfo.html/"+data.trains[i].trainId+"' class=\"am-icon-pencil-square-o\">查看</a>" +
+                            "  </button></th>" +
+                            "</tr>");
+                    }
+                }
+            })
+        })
+        $("#button").on("click",function () {
+            /!*alert($("#trainName").val())*!/
+            $.ajax({
+                url:"/train/lookTrainType.do",
+                type:"get",
+                data:{"typeName":$("select[name=typeName]").val(),
+                    "status":$("select[name=status]").val(),
+                    "trainName":$("#trainName").val()},
+                dataType:"json",
+                success:function (data) {
+
+                    if(data.pageNum<=1){
+                        $("#previousPage").hide();
+                    }else {
+                        $("#previousPage").show();
+                    }
+                    if(data.pageNum>=data.numberPage){
+                        $("#nextPage").hide();
+                    }else {
+                        $("#nextPage").show();
+                    }
+                    $("#nextPage").attr("page",data.pageNum);
+                    $("#previousPage").attr("page",data.pageNum);
+                    $("#show1").html(data.pageNum);
+                    $("#show2").html(data.numberPage);
+                    $("tbody").html("");
+                    for(var i=0;i<data.trains.length;i++){
+                        $("tbody").append("<tr>" +
+                            "<th class=\"table-title\">"+data.trains[i].trainName+"</th>" +
+                            "<th class=\"table-title\">"+data.trains[i].traintype.typeName+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainExpense+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainHost+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainMaster+"</th>" +
+                            "<td class=\"am-hide-sm-only\">"+data.trains[i].trainLocation+"</td>"+
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainBtime+"</th>" +
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainEtime+"</th>" +
+                            "<th class=\"table-set\"> " +
+                            "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary\">" +
+                            " <a href='/train/traininfo.html/"+data.trains[i].trainId+"' class=\"am-icon-pencil-square-o\">查看</a>" +
+                            "  </button></th>" +
+                            "</tr>");
+                    }
+                }
+            })
+
+            })
+        $("#nextPage").click(function(){
+            var page=$(this).attr("page");
+            $.ajax({
+                url:"/train/lookTrainType.do",
+                type:"get",
+                data:{"page":parseInt(page)+1,
+                    "typeName":$("select[name=typeName]").val(),
+                    "status":$("select[name=status]").val(),
+                    "trainName":$("#trainName").val()},
+                dataType:"json",
+                success:function(data){
+                    if(data.pageNum<=1){
+                        $("#previousPage").hide();
+                    }else {
+                        $("#previousPage").show();
+                    }
+                    if(data.pageNum>=data.numberPage){
+                        $("#nextPage").hide();
+                    }else {
+                        $("#nextPage").show();
+                    }
+                    $("#nextPage").attr("page",data.pageNum);
+                    $("#previousPage").attr("page",data.pageNum);
+                    $("#show1").html(data.pageNum);
+                    $("#show2").html(data.numberPage);
+                    $("tbody").html("");
+                    for(var i=0;i<data.trains.length;i++){
+                        $("tbody").append("<tr>" +
+                            "<th class=\"table-title\">"+data.trains[i].trainName+"</th>" +
+                            "<th class=\"table-title\">"+data.trains[i].traintype.typeName+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainExpense+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainHost+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainMaster+"</th>" +
+                            "<td class=\"am-hide-sm-only\">"+data.trains[i].trainLocation+"</td>"+
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainBtime+"</th>" +
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainEtime+"</th>" +
+                            "<th class=\"table-set\"> " +
+                            "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary\">" +
+                            " <a href='/train/traininfo.html/"+data.trains[i].trainId+"' class=\"am-icon-pencil-square-o\">查看</a>" +
+                            "  </button></th>" +
+                            "</tr>");
+                    }
+                },
+                "error":function(data){
+                    alert("error"+data);
+                }
+            })
+        });
+        $("#previousPage").click(function(){
+            var page=$(this).attr("page");
+            $.ajax({
+                url:"/train/lookTrainType.do",
+                type:"get",
+                data:{"page":parseInt(page)-1,
+                    "typeName":$("select[name=typeName]").val(),
+                    "status":$("select[name=status]").val(),
+                    "trainName":$("#trainName").val()},
+                dataType:"json",
+                success:function(data){
+                    if(data.pageNum<=1){
+                        $("#previousPage").hide();
+                    }else {
+                        $("#previousPage").show();
+                    }
+                    if(data.pageNum>=data.numberPage){
+                        $("#nextPage").hide();
+                    }else {
+                        $("#nextPage").show();
+                    }
+                    $("#nextPage").attr("page",data.pageNum);
+                    $("#previousPage").attr("page",data.pageNum);
+                    $("#show1").html(data.pageNum);
+                    $("#show2").html(data.numberPage);
+                    $("tbody").html("");
+                    for(var i=0;i<data.trains.length;i++){
+                        $("tbody").append("<tr>" +
+                            "<th class=\"table-title\">"+data.trains[i].trainName+"</th>" +
+                            "<th class=\"table-title\">"+data.trains[i].traintype.typeName+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainExpense+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainHost+"</th>" +
+                            "<th class=\"table-type\">"+data.trains[i].trainMaster+"</th>" +
+                            "<td class=\"am-hide-sm-only\">"+data.trains[i].trainLocation+"</td>"+
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainBtime+"</th>" +
+                            "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainEtime+"</th>" +
+                            "<th class=\"table-set\"> " +
+                            "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary\">" +
+                            " <a href='/train/traininfo.html/"+data.trains[i].trainId+"' class=\"am-icon-pencil-square-o\">查看</a>" +
+                            "  </button></th>" +
+                            "</tr>");
+                    }
+                },
+                "error":function(data){
+                    alert("error"+data);
+                }
+            })
+        });
+        $("#go").click(function(){
+            var page=$("#page").val();
+            var PageNumber=$("#show2").text();
+            if(page==null||isNaN(parseInt(page))){
+                alert("请输入正确的数字！");
+            }else if(parseInt(page)<1){
+                alert("跳转页面不得小于1！");
+            }else if(parseInt(page)>parseInt(PageNumber)){
+
+                alert("跳转页面不得大于总页面数！");
+            }else {
+                $.ajax({
+                    url:"/train/lookTrainType.do",
+                    type:"get",
+                    data:{"page":parseInt(page),
+                        "typeName":$("select[name=typeName]").val(),
+                        "status":$("select[name=status]").val(),
+                        "trainName":$("#trainName").val()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.pageNum<=1){
+                            $("#previousPage").hide();
+                        }else {
+                            $("#previousPage").show();
+                        }
+                        if(data.pageNum>=data.numberPage){
+                            $("#nextPage").hide();
+                        }else {
+                            $("#nextPage").show();
+                        }
+                        $("#nextPage").attr("page",data.pageNum);
+                        $("#previousPage").attr("page",data.pageNum);
+                        $("#show1").html(data.pageNum);
+                        $("#show2").html(data.numberPage);
+                        $("tbody").html("");
+                        for(var i=0;i<data.trains.length;i++){
+                            $("tbody").append("<tr>" +
+                                "<th class=\"table-title\">"+data.trains[i].trainName+"</th>" +
+                                "<th class=\"table-title\">"+data.trains[i].traintype.typeName+"</th>" +
+                                "<th class=\"table-type\">"+data.trains[i].trainExpense+"</th>" +
+                                "<th class=\"table-type\">"+data.trains[i].trainHost+"</th>" +
+                                "<th class=\"table-type\">"+data.trains[i].trainMaster+"</th>" +
+                                "<td class=\"am-hide-sm-only\">"+data.trains[i].trainLocation+"</td>"+
+                                "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainBtime+"</th>" +
+                                "<th class=\"table-author am-hide-sm-only\">"+data.trains[i].trainEtime+"</th>" +
+                                "<th class=\"table-set\"> " +
+                                "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary\">" +
+                                " <a href='/train/traininfo.html/"+data.trains[i].trainId+"' class=\"am-icon-pencil-square-o\">查看</a>" +
+                                "  </button></th>" +
+                                "</tr>");
+                        }
+                    },
+                    "error":function(data){
+                        alert("error"+data);
+                    }
+                })
+            }
+            $("#page").val("");
+        })
+    })
+</script>
+
+<div class="portlet-title">
+    <div class="caption font-green bold">
+        培训系统>
+        公司培训项目
+    </div>
+</div>
+<div class="tpl-block">
+    <div class="am-g">
+
+        <div class="am-u-sm-12 am-u-md-3">
+            <div class="am-form-group">
+                <select name="typeName" data-am-selected="{btnSize: 'sm'}" style="display: none;">
+                    <option value="null">所有类型</option>
+
+                        <option th:each="traintype:${traintypeList}" value="" th:value="${traintype.typeName}"  th:text="${traintype.typeName}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-3">
+            <select name="status" data-am-selected="{btnSize: 'sm'}" style="display: none;">
+                <option value="0">培训状态</option>
+                <option value="1">可培训</option>
+                <option value="2">已培训</option>
+                <option value="3">正在培训</option>
+            </select>
+        </div>
+        <div class="am-u-sm-12 am-u-md-3">
+            <div class="am-input-group am-input-group-sm">
+                <input type="text" value="" id="trainName" class="am-form-field" placeholder="输入项目关键字" >
+                <span class="am-input-group-btn" >
+            <button class="am-btn  am-btn-default am-btn-success tpl-am-btn-success am-icon-search" type="button" id="button"></button>
+          </span>
+            </div>
+        </div>
+    </div>
+    <div class="am-g" style="height: 530px; ">
+        <div class="am-u-sm-12">
+            <form class="am-form">
+                <table class="am-table am-table-striped am-table-hover table-main">
+                    <thead>
+                    <tr>
+                        <th class="table-title">培训项目</th>
+                        <th class="table-title">培训类型</th>
+                        <th class="table-type">培训费</th>
+                        <th class="table-type">培训主持</th>
+                        <th class="table-type">培训老师</th>
+                        <th class="table-type">培训地点</th>
+                        <th class="table-author am-hide-sm-only">开始时间</th>
+                        <th class="table-author am-hide-sm-only">结束时间</th>
+                        <th class="table-set">查看详情</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--<tr>
+                        <td>管理层培训</td>
+                        <td>管理培训</td>
+                        <td>1000</td>
+                        <td class="am-hide-sm-only">测试1号</td>
+                        <td class="am-hide-sm-only">老师</td>
+                        <td class="am-hide-sm-only">地点</td>
+                        <td class="am-hide-sm-only">2019-10-11</td>
+                        <td class="am-hide-sm-only">2019-10-12</td>
+                       <td>
+                           <button class="am-btn am-btn-default am-btn-xs am-text-secondary">
+                               <a href="#" class="am-icon-pencil-square-o"></a>
+                               查看</button>
+                       </td>
+                    </tr>-->
+                    </tbody>
+                </table>
+                <hr>
+            </form>
+        </div>
+        <div style="float: right;"  id="sorter">
+            <span id="show1"></span>/<span id="show2"></span>
+            <a href="javascript:;" page="1" id="previousPage">上一页</a>
+            <a href="javascript:;" page="1" id="nextPage">下一页</a>
+            <span style="padding:0px 10px 0px 20px;">跳转至</span>
+            <input type=" text" id="page"  style="width: 40px;border: 1px solid #000000">
+            <span style="padding:0px 10px 0px 10px;">页</span>
+            <input type="button" id="go" value="GO">
+        </div>
+    </div>
+</div>
+<div th:replace="common/foot :: foot"></div>

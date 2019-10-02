@@ -1,0 +1,89 @@
+
+<!doctype html>
+
+<%@include file="common/head.jsp"%>
+<div class="portlet-title">
+    <div class="caption font-green bold">
+       <%-- <span class="am-icon-code"></span> --%>
+    <c:if test="${modify==null}">
+               人员系统>员工档案录入
+    </c:if>
+    <c:if test="${modify!=null}">
+        人员系统>员工档案列表>修改员工档案
+    </c:if>
+    </div>
+    <div class="tpl-portlet-input tpl-fz-ml">
+        <div class="portlet-input input-small input-inline">
+
+        </div>
+    </div>
+</div>
+<div class="tpl-block " style="height: 602px">
+
+    <div class="am-g tpl-amazeui-form">
+
+
+        <div class="am-u-sm-12 am-u-md-9">
+            <fm:form modelAttribute="stafffile" class="am-form am-form-horizontal"
+                     action="${pageContext.request.contextPath}/stafffile/addSaveStafffile" method="post">
+                <c:if test="${modify!=null}">
+                    <input type="hidden" value="modify" name="modify" id="modify">
+                    <input type="hidden" value="${stafffile.fileId}" name="fileId" id="fileId">
+                </c:if>
+                <div style="height: 50px;"></div>
+                <div class="am-form-group">
+                    <label for="pId" class="am-u-sm-3 am-form-label">员工编号 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="number" id="pId" name="pId" required placeholder="请输入员工编号"
+                               value="${stafffile.PId}" <c:if test="${modify!=null}">readonly</c:if>>
+                        <fm:errors path="pId" cssStyle="color: red"/>
+                        <span style="color: red">${error}</span>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="fileName" class="am-u-sm-3 am-form-label">档案名称 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="fileName" name="fileName" required placeholder="请输入档案名称"
+                               value="${stafffile.fileName}">
+                        <fm:errors path="fileName" cssStyle="color: red"/>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="fileAbstract" class="am-u-sm-3 am-form-label">档案摘要 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="fileAbstract" name="fileAbstract" required placeholder="请输入档案摘要"
+                               value="${stafffile.fileAbstract}">
+                        <fm:errors path="fileAbstract" cssStyle="color: red"/>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="rewardNote" class="am-u-sm-3 am-form-label">奖惩记录 :</label>
+                    <div class="am-u-sm-9">
+                        <textarea class="" rows="5" id="rewardNote" name="rewardNote" required placeholder="请输入奖惩记录">${stafffile.rewardNote}</textarea>
+                        <fm:errors path="rewardNote" cssStyle="color: red"/>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="experience" class="am-u-sm-3 am-form-label">工作经验 :</label>
+                    <div class="am-u-sm-9">
+                        <textarea class="" rows="5" id="experience" name="experience" required placeholder="请输入工作经验">${stafffile.experience}</textarea>
+                        <fm:errors path="experience" cssStyle="color: red"/>
+                    </div>
+                </div>
+
+
+
+                <div class="am-form-group">
+                    <div class="am-u-sm-9 am-u-sm-push-3">
+                        <button type="submit" class="am-btn am-btn-primary">保存修改</button>
+                    </div>
+                </div>
+            </fm:form>
+        </div>
+    </div>
+</div>
+<%@include file="common/foot.jsp"%>

@@ -1,0 +1,181 @@
+
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<!--<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>-->
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url:"/train/getAllTraintype",
+            dataType:"Json",
+            type:"get",
+            success:function (data) {
+                $("select[name=typeCode]").html("<option></option>");
+                for(var i=0;i<data.length;i++){
+                    $("select[name=typeCode]").append("" +
+                        "<option value='"+data[i].typeCode+"'>"+data[i].typeName+"</option>");
+                }
+            }
+        })
+        $("input[name=trainName]").on("blur",function () {
+            var trainName=$(this).val();
+          if(trainName!=""){
+              $.ajax({
+                  url:"/train/trainName",
+                  dataType:"Json",
+                  data:"trainName="+trainName,
+                  type:"get",
+                  success:function (data) {
+                      if(!data){
+                          alert("此项目已存在，无法添加！")
+                      }
+                  }
+              })
+          }
+        })
+        $("input[name=trainExpense]").on("blur",function () {
+            var trainExpense=$(this).val();
+            if(isNaN(trainExpense)){
+                alert("请输入数字");
+            }
+        })
+        $("#TrainForm").validate({
+            rules: {
+                trainName: {
+                    required: true,
+                },
+                trainCode: {
+                    required: true,
+                },
+                trainBtime: {
+                    required: true,
+                },
+                trainEtime: {
+                    required: true,
+                },
+                trainExpense: {
+                    required: true,
+                    digits:true,
+                },
+                trainHost: {
+                    required: true,
+                },
+                trainMaster: {
+                    required: true,
+                },
+                trainLocation: {
+                    required: true,
+                },
+            },
+                messages:{
+                    trainName: {
+                        required: "请输入项目名",
+                    },
+                    trainCode: {
+                        required: "请选择培训类型",
+                    },
+                    trainBtime: {
+                        required: "请填写培训开始时间",
+                    },
+                    trainEtime: {
+                        required: "请填写培训结束时间",
+                    },
+                    trainExpense: {
+                        required: "请输入培训所需费用",
+                        digits:"只能输入数字",
+                    },
+                    trainHost: {
+                        required: "培训主持不能为空",
+                    },
+                    trainMaster: {
+                        required: "请输入培训老师姓名",
+                    },
+                    trainLocation: {
+                        required: "请输入培训详细地址",
+                    },
+                }
+        })
+    })
+</script>
+<div th:replace ="common/head :: head"></div>
+<div class="portlet-title">
+    <div class="caption font-green bold">
+        培训系统>增加培训项目
+    </div>
+</div>
+<div class="tpl-form-body tpl-form-line">
+    <div style="height: 50px"></div>
+    <form modelAttribute="train" th:object="${train}"  method="post" th:action="@{/train/addTrain.do}" class="am-form tpl-form-line-form" id="TrainForm">
+        <div class="am-form-group">
+            <label for="user-name" class="am-u-sm-3 am-form-label">项目名<span class="tpl-form-line-small-title">project</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" th:value="${trainName}" required name = "trainName" class="tpl-form-input" id="user-name" placeholder="请输入项目名">
+                <fm:errors path="trainName" cssStyle="color: red"></fm:errors>
+            </div>
+        </div>
+        <div class="am-form-group">
+            <label for="user-phone" class="am-u-sm-3 am-form-label">培训类型 <span class="tpl-form-line-small-title">type</span></label>
+            <div class="am-u-sm-9">
+                <select name="typeCode" data-am-selected="{searchBox: 1}" style="display: none;">
+
+                </select>
+                <fm:errors path="typeCode" cssStyle="color: red"/>
+            </div>
+        </div>
+        <div class="am-form-group">
+            <label for="user-email" class="am-u-sm-3 am-form-label">开始时间 <span class="tpl-form-line-small-title">Time</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" required th:value="${trainBtime}" name="trainBtime" class="am-form-field tpl-form-no-bg" placeholder="培训开始时间" data-am-datepicker="" readonly="">
+                <fm:errors path="trainBtime" cssStyle="color: red"/>
+            </div>
+        </div>
+        <div class="am-form-group">
+            <label for="user-email" class="am-u-sm-3 am-form-label">结束时间 <span class="tpl-form-line-small-title">Time</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" required th:value="${trainEtime}" name="trainEtime" class="am-form-field tpl-form-no-bg" placeholder="培训结束时间" data-am-datepicker="" readonly="">
+                <fm:errors path="trainEtime" cssStyle="color: red"/>
+            </div>
+        </div>
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">培训费用<span class="tpl-form-line-small-title">money</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" required th:value="${trainExpense}" name="trainExpense" placeholder="输入数字">
+                <fm:errors path="trainExpense" cssStyle="color: red"/>
+            </div>
+        </div>
+
+        <div class="am-form-group">
+            <label for="user-weibo"  class="am-u-sm-3 am-form-label">主持人 <span class="tpl-form-line-small-title">presenter</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" required th:value="${trainHost}" name="trainHost" id="user-weibo" placeholder="输入主持人姓名">
+                <fm:errors path="trainHost" cssStyle="color: red"/>
+                <div>
+                </div>
+            </div>
+        </div>
+        <div class="am-form-group">
+            <label for="user-weibo" class="am-u-sm-3 am-form-label">培训老师 <span class="tpl-form-line-small-title">master</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" required th:value="${trainMaster}" name="trainMaster"  placeholder="输入培训老师姓名">
+                <fm:errors path="trainMaster" cssStyle="color: red"/>
+                <div>
+                </div>
+            </div>
+        </div>
+        <div class="am-form-group">
+            <label for="user-weibo" class="am-u-sm-3 am-form-label">培训地址 <span class="tpl-form-line-small-title">address</span></label>
+            <div class="am-u-sm-9">
+                <input name="trainLocation" required type="text" th:value="${trainLocation}"   placeholder="输入培训详细地址">
+                <fm:errors path="trainLocation" cssStyle="color: red"/>
+                <div>
+                </div>
+            </div>
+        </div>
+        <div class="am-form-group">
+            <div class="am-u-sm-9 am-u-sm-push-3">
+                <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<div th:replace="common/foot :: foot"></div>

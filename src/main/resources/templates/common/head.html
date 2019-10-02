@@ -1,0 +1,243 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="head"></div>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="/assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="/assets/css/amazeui.min.css" />
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <script src="/assets/js/echarts.min.js"></script>
+    <script src="/assets/js/jquery-1.11.1.min.js"></script>
+    <script src="/assets/js/jquery.validate.min.js"></script>
+    <script src="/assets/js/jquery-1.11.1.min.js"></script>
+    <style>
+        .errorRed{
+            color: red;
+        }
+    </style>
+
+</head>
+
+<body data-type="chart" th:fragment="head">
+
+
+<header class="am-topbar am-topbar-inverse admin-header">
+    <div class="am-topbar-brand">
+        <span style="margin-left: 20px;font-weight: bold">HR人事管理系统</span>
+
+    </div>
+    <div class="am-icon-list tpl-header-nav-hover-ico am-fl am-margin-right" style="padding-top: 30px;">
+
+    </div>
+
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+    <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+        <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+
+
+            <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                    <span class="tpl-header-list-user-nick" th:text="${session.admin.adminUsername}"></span><span class="tpl-header-list-user-ico"> <img
+                        src="/assets/img/user01.png"></span>
+                </a>
+                <ul class="am-dropdown-content">
+
+                    <li><a href="/admin/login.out"><span class="am-icon-power-off"></span> 退出</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>
+
+
+
+
+
+
+
+<div class="tpl-page-container tpl-page-header-fixed">
+
+    <div class="tpl-left-nav tpl-left-nav-hover" style="margin-top: 10px;">
+
+        <div class="tpl-left-nav-list">
+            <ul class="tpl-left-nav-menu">
+                <li class="tpl-left-nav-item">
+                    <a href="/admin/index.html" class="nav-link">
+                        <i class="am-icon-home"></i>
+                        <span>首页</span>
+                    </a>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-table"></i>
+                        <span>人员系统</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a th:href="@{~/staff/viewAllStaff.html}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>员工信息查看</span>
+                                <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                            </a>
+
+                            <a th:href="@{~/staff/addStaff.html}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>员工信息录入</span>
+
+
+                            <a th:href="@{~/stafffile/viewAllStafffile.html}">
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>员工档案查询</span>
+
+                                    <a th:href="@{~/stafffile/addStafffile.html}">
+                                        <i class="am-icon-angle-right"></i>
+                                        <span>员工档案录入</span>
+
+                                    </a>
+
+                                    <a th:href="@{~/staffAgree/viewAllAgreement.html}">
+                                        <i class="am-icon-angle-right"></i>
+                                        <span>员工工资查询</span>
+
+                                    </a>
+
+                                    <a th:href="@{~/staffAgree/addAgreement.html}">
+                                        <i class="am-icon-angle-right"></i>
+                                        <span>员工工资录入</span>
+
+                                    </a>
+                        </li>
+                    </ul>
+                        </li>
+
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-table"></i>
+                        <span>人事变动系统</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a th:href="@{~/inform/hrChangeInfoShow.html}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>人事变动信息查看</span>
+                                <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                            </a>
+
+                            <a th:href="@{~/inform/hrChangeInfoAdd.html}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>人事变动信息录入</span>
+                            </a>
+
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-table"></i>
+                        <span>培训系统</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a th:href="@{~/train/lookTrainType.html}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>公司培训项目</span>
+                                <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                            </a>
+                            <a th:href="@{~/train/addTrain.html}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>增加培训项目</span>
+                                <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                            </a>
+
+                            <a th:href="@{~/train/addTrainCategory.html}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>增加培训类别</span>
+
+
+                                <a th:href="@{~/train/TrainRecords.html}">
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>员工培训记录</span>
+
+
+                                    <a th:href="@{~/train/addTrainRecords.html}">
+                                        <i class="am-icon-angle-right"></i>
+                                        <span>增加培训记录</span>
+
+                                    </a>
+
+                                    <a th:href="@{~/train/StaffCert.html}">
+                                        <i class="am-icon-angle-right"></i>
+                                        <span>查看员工证书</span>
+
+                                    </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-wpforms"></i>
+                        <span>事务通知系统</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a th:href="@{~/inform/informSend.html}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>发布通知</span>
+                                <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                            </a>
+
+                            <a th:href="@{~/inform/informHistroy.html}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>历史通知</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="tpl-left-nav-item">
+                    <a href="/admin/login.out" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-key"></i>
+                        <span>注销</span>
+
+                    </a>
+                </li>
+            </ul>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+
+        </div>
+    </div>
+
+
+
+
+
+    <div class="tpl-content-wrapper">
+
+        <div class="tpl-portlet-components"  style="height: 690px;">
+

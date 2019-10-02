@@ -1,0 +1,118 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace ="common/head :: head"></div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+
+    })
+</script>
+
+<div class="portlet-title">
+    <div class="caption font-green bold">
+      <%--  <span class="am-icon-code"></span>--%>
+          <c:if test="${modify!=null}">
+              人员系统>员工列表>员工信息修改
+          </c:if>
+          <c:if test="${modify==null}">
+              人员系统>员工信息录入
+          </c:if>
+    </div>
+    <div class="tpl-portlet-input tpl-fz-ml">
+        <div class="portlet-input input-small input-inline">
+
+        </div>
+    </div>
+
+
+</div>
+<div class="tpl-block " style="height: 602px;">
+
+    <div class="am-g tpl-amazeui-form">
+
+
+        <div class="am-u-sm-12 am-u-md-9">
+            <div style="height: 50px;"></div>
+            <fm:form modelAttribute="staff" id="addStaff" action="${pageContext.request.contextPath}/staff/addSaveStaff"
+                     class="am-form am-form-horizontal">
+                <c:if test="${modify!=null}">
+                    <input type="hidden" value="modify" name="modify" id="modify">
+                    <input type="hidden" value="${staff.PId}" name="pId" id="pId">
+                </c:if>
+                <div class="am-form-group">
+                    <label for="pName" class="am-u-sm-3 am-form-label">姓名 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="pName" id="pName" required placeholder="请输入姓名"
+                               value="${staff.PName}">
+                        <fm:errors path="pName" cssStyle="color: red"/>
+                    </div>
+
+                </div>
+                <div class="am-form-group">
+                    <label for="sex" class="am-u-sm-3 am-form-label">性别 :</label>
+                    <div class="am-u-sm-9">
+                        <select name="sex" id="sex" required>
+                            <option></option>
+                            <option value="男" <c:if test="${staff.sex=='男'}">selected</c:if>>男</option>
+                            <option value="女" <c:if test="${staff.sex=='女'}">selected</c:if>>女</option>
+                        </select>
+                        <fm:errors path="sex" cssStyle="color: red"/>
+                    </div>
+
+                </div>
+
+                <div class="am-form-group">
+                    <label for="degree" class="am-u-sm-3 am-form-label">学历 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="tel" id="degree" name="degree" required placeholder="请输入学历"
+                               value="${staff.degree}">
+                        <fm:errors path="degree" cssStyle="color: red"/>
+                    </div>
+
+                </div>
+
+                <div class="am-form-group">
+                    <label for="department" class="am-u-sm-3 am-form-label">部门 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="department" name="department" required placeholder="请输入部门"
+                               value="${staff.department}">
+                        <fm:errors path="department" cssStyle="color: red"/>
+                    </div>
+
+                </div>
+
+                <div class="am-form-group">
+                    <label for="position" class="am-u-sm-3 am-form-label">职位 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="position" name="position" required placeholder="请输入职位"
+                               value="${staff.position}">
+                        <fm:errors path="position" cssStyle="color: red"/>
+                    </div>
+
+                </div>
+
+                <div class="am-form-group">
+                    <label for="state" class="am-u-sm-3 am-form-label">工作状态 :</label>
+                    <div class="am-u-sm-9">
+                        <select id="state" name="state" required>
+                            <option></option>
+                            <option value="在职"  <c:if test="${staff.state=='在职'}">selected</c:if>>在职</option>
+                            <option value="试用期"  <c:if test="${staff.sex=='试用期'}">selected</c:if>>试用期</option>
+                        </select>
+                        <fm:errors path="state" cssStyle="color: red"/>
+                    </div>
+
+                </div>
+
+                <div class="am-form-group">
+                    <div class="am-u-sm-9 am-u-sm-push-3">
+                        <button type="submit" class="am-btn am-btn-primary">保存修改</button>
+                    </div>
+                </div>
+            </fm:form>
+        </div>
+    </div>
+</div>
+<div th:replace="common/foot :: foot"></div>

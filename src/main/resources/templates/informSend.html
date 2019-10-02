@@ -1,0 +1,135 @@
+
+<!doctype html>
+<%@include file="common/head.jsp"%>
+<script src="${pageContext.request.contextPath }/assets/js/jquery-1.11.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/jquery.validate.js"></script>
+<%--<script>
+    $.validator.setDefaults({
+        submitHandler: function() {
+            alert("提交事件!");
+        }
+    });
+    $().ready(function () {
+        $("#add").validate();
+    })
+
+</script>--%>
+<script >
+    var informTitle= null;
+    var informDate=null;
+    var content=null;
+    $(document).ready(function() {
+        informTitle=$("#informTitle");
+        informDate=$("#informDate");
+        content=$("#content");
+        informTitle.on("blur",function () {
+            if(informTitle.val()==null||informTitle.val()==""){
+                informTitle.next().html("---通知标题不能为空！---")
+                informTitle.next().addClass("errorRed");
+            }else if(informTitle.val().length>10||informTitle.val().length<5){
+                informTitle.next().html("---标题文字请控制在10-20字左右---")
+                informTitle.next().addClass("errorRed");
+                return;
+            }
+        }).on("focus",function () {
+            informTitle.next().html("")
+        })
+        informDate.on("blur",function () {
+            if(informDate.val()==null||informDate.val()==""){
+                informDate.next().html("---发布时间不能为空！---")
+                informDate.next().addClass("errorRed");
+            }
+        }).on("focus",function () {
+            informDate.next().html("")
+        })
+        content.on("blur",function () {
+            if(content.val()==null||content.val()==""){
+                content.next().html("---通知内容不能为空！---")
+                content.next().addClass("errorRed");
+            }
+        }).on("focus",function () {
+            content.next().html("")
+        })
+        $("#submit").on("click",function () {
+            if(confirm("确认发布此条通知吗？")){
+                $.ajax({
+                    url:"${pageContext.request.contextPath}/inform/informSendSave",
+                    data:{"informTitle":$("#informTitle").val(),
+                        "informDate":$("#informDate").val(),
+                        "notificationContent":$("#content").val()},
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        if(data.flag){
+                            if(confirm("发布成功！")){
+                                window.location.href="${pageContext.request.contextPath}/inform/informHistroy.html";
+                            }
+                        }else{
+                            alert("发布失败！请按照以下要求发布通知！");
+                        }
+                        if(data.errors!=null) {
+                            for (var i = 0; i < data.errors.length; i++) {
+                                alert(data.errors[i].defaultMessage);
+                            }
+                        }
+                    }
+                })
+
+            }
+})
+})
+</script>
+<div class="tpl-content-page-title" style="height: 500px;text-align: center">
+    <div class="portlet-title">
+        <div class="caption font-green bold">
+            <span>事务通知系统</span> > 发布通知
+        </div>
+
+    </div>
+
+    <div class="tpl-block">
+
+        <div class="am-g">
+            <div class="tpl-form-body tpl-form-line">
+                <form  id="add" action="javascript:;" method="post" class="am-form tpl-form-line-form">
+                    <div class="am-form-group">
+                        <label for="informTitle" class="am-u-sm-3 am-form-label">通知标题 <span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" class="tpl-form-input" id="informTitle" name="informTitle" value="" placeholder="请输入标题文字" required>
+                            <fm:errors path="informTitle"></fm:errors>
+                            <small>请填写标题文字10-20字左右。</small>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="informDate" class="am-u-sm-3 am-form-label">发布时间 <span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="informDate" name="informDate" class="am-form-field tpl-form-no-bg"
+                                   value=""  placeholder="选择发布时间" data-am-datepicker=""  required/>
+                            <fm:errors path="informDate"></fm:errors>
+                            <small>发布时间为必填</small>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="content" class="am-u-sm-3 am-form-label">通知内容</label>
+                        <div class="am-u-sm-9">
+                            <textarea class="" rows="10" id="content" name="notificationContent" placeholder="请输入通知内容" required></textarea>
+                            <fm:errors path="notificationContent"></fm:errors>
+                            <small></small>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="submit" id="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success ">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%@include file="common/foot.jsp"%>

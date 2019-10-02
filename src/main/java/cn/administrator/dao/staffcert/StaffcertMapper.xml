@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.administrator.dao.staffcert.StaffcertMapper">
+    <resultMap id="Staffcert" type="staffcert">
+        <result property="cerId" column="cer_id"/>
+        <result property="gradeId" column="grade_id"/>
+        <result property="cerName" column="cer_name"/>
+        <result property="cerDate" column="cer_date"/>
+        <association property="staff" javaType="staff">
+            <result property="pName" column="p_name"/>
+        </association>
+        <association property="traingrade" javaType="traingrade">
+            <result property="grade" column="grade"/>
+            <result property="subject" column="subject"/>
+        </association>
+        <association property="train" column="train">
+            <result property="trainName" column="train_name"/>
+        </association>
+    </resultMap>
+    <select id="getStaffcert" resultMap="Staffcert">
+        SELECT * from staffcert as f
+        INNER JOIN traingrade as g on(f.grade_id=g.grade_id)
+        INNER JOIN train as t on(g.train_id=t.train_id)
+        INNER JOIN staff as s on(g.p_id=s.p_id)
+        <where>
+            <if test="name!=null and name!=''">p_name like concat('%',#{name},'%')</if>
+            <if test="cerName!=null and cerName!=''">and cer_name=#{cerName}</if>
+            <if test="gradeId!=0 and gradeId!=null">and g.grade_id=#{gradeId}</if>
+        and cer_name is not null
+        </where>
+    </select>
+
+    <delete id="delGradeById">
+        delete from staffcert where grade_id=#{trainId}
+    </delete>
+    <insert id="add" useGeneratedKeys="true" keyProperty="cerId">
+        insert into staffcert(cer_name,cer_date,grade_id)
+        value (#{cerName},#{cerDate},#{gradeId});
+    </insert>
+    <update id="update">
+        update staffcert
+        <set>
+            <if test="cerName!=null and cerName!=''">
+                cer_name=#{cerName},
+            </if>
+            <if test="cerName==null or cerName==''">
+                cer_name=null,
+            </if>
+
+        </set>
+        where grade_id=#{gradeId}
+    </update>
+</mapper>

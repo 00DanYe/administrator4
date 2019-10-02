@@ -1,0 +1,219 @@
+
+<!doctype html>
+<%@page language="java" contentType="text/html;charset=UTF-8"
+pageEncoding="UTF-8" isErrorPage="false" %>
+<%@include file="common/head.jsp"%>
+<script !src="">
+     var apName=null;
+     var alterTime=null;
+     var alterContent=null;
+     var alterBstate=null;
+     var alterEstate=null;
+     var alterType=null;
+     var saveBtn=null;
+     var goBack=null;
+     $(document).ready(function() {
+         apName=$("#apName");
+         alterTime=$("#alterTime");
+         alterContent=$("#alterContent");
+         alterType=$("#alterType");
+         alterBstate=$("#alterBstate");
+         alterEstate=$("#alterEstate");
+         saveBtn=$("#saveBtn");
+         goBack=$("#goBack");
+         apName.on("blur",function () {
+             if(apName.val()==null||apName.val()==""){
+                 apName.next().html("---员工姓名必填！！---")
+                 apName.next().addClass("errorRed");
+             }else{
+                 $.ajax({
+                     url:"${pageContext.request.contextPath}/inform/exisApName",
+                     data:"apName="+apName.val(),
+                     type:"post",
+                     dataType:"json",
+                     success:function (data) {
+                         if(data.flag){
+                             alert("这员工存在！，继续往下写！！！");
+                             alterBstate.val(data.position);
+                         }else{
+                             alert("这人不是你们公司的！！");
+                         }
+                     },
+                     error:function (data) {
+                         alert("遇到未知错误");
+                     }
+                 })
+             }
+         }).on("focus",function () {
+             apName.next().html("")
+         });
+         alterTime.on("blur",function () {
+             if(alterTime.val()==null){
+                 alterTime.next().html("---变动生效时间必填---");
+                 alterTime.next().addClass("errorRed");
+             }
+         }).on("focus",function () {
+             alterTime.next().html("");
+         });
+         alterType.on("blur",function () {
+             if(alterType.val()==null||alterType.val()==""){
+                 alterType.next().html("---调动类型必选---");
+                 alterType.next().addClass("errorRed");
+             }
+         }).on("focus",function () {
+             alterType.next().html("");
+
+         })
+         alterEstate.on("blur",function () {
+             if(alterEstate.val()==null||alterEstate.val()==""){}
+             alterEstate.next().html("---变动后职位必填---");
+             alterEstate.next().addClass("errorRed");
+         }).on("focus",function () {
+             alterEstate.next().html("");
+         })
+         alterContent.on("blur",function () {
+             if(alterContent.val()==null||alterContent.val()==""){
+                 alterContent.next().html("---变动生效时间必填---");
+                 alterContent.next().addClass("errorRed");
+             }
+         }).on("focus",function () {
+             alterContent.next().html("");
+         });
+         goBack.on("click",function () {
+             history.back(-1)
+         });
+         saveBtn.on("click",function () {
+             if(confirm("确认发布此条人事变动消息吗？")){
+                 $.ajax({
+                     url:"${pageContext.request.contextPath}/inform/changeInfoAddSave",
+                     data:{"apName":apName.val(),"alterBstate":alterBstate.val(),
+                            "alterType":alterType.val(),"alterTime":alterTime.val(),
+                            "alterEstate":alterEstate.val(),"alterContent":alterContent.val()},
+                     dataType:"json",
+                     type:"post",
+                     success:function (data) {
+                         if(data.flag){
+                             if(confirm("发送成功！")){
+                                 window.location.href="${pageContext.request.contextPath}/inform/hrChangeInfoShow.html";
+                             }
+                         }else{
+                             alert("发送失败！请按照以下要求发布通知！");
+                         }
+                         if(data.errors!=null) {
+                             for (var i = 0; i < data.errors.length; i++) {
+                                 alert(data.errors[i].defaultMessage);
+                             }
+                         }
+                     }
+                 })
+             return false;
+             }
+         })
+
+    })
+</script>
+<div class="tpl-content-page-title" style="height: 500px;text-align: center">
+    <div class="portlet-title">
+        <div class="caption font-green bold">
+            <span>人事变动系统 > 人事变动消息录入</span>
+        </div>
+       <%-- <div class="tpl-portlet-input tpl-fz-ml">
+            <div class="portlet-input input-small input-inline">
+                <div class="input-icon right">
+                    <i class="am-icon-search"></i>
+                    <input type="text" class="form-control form-control-solid" placeholder="搜索..."> </div>
+            </div>
+        </div>--%>
+    </div>
+    <div class="tpl-block ">
+
+        <div class="am-g tpl-amazeui-form">
+            <div class="am-u-sm-12 am-u-md-9">
+                <div style="height: 50px;"></div>
+                <form class="am-form am-form-horizontal" action="javascript:;" method="post">
+                    <div class="am-form-group">
+                    <label for="apName" class="am-u-sm-3 am-form-label">员工姓名</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="apName" name="apName" value="" placeholder="请输入员工姓名查询">
+                            <input type="hidden" id="apId" name="apId" value="">
+                            <small></small>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="alterBstate" class="am-u-sm-3 am-form-label">现任岗位</label>
+                        <div class="am-u-sm-9" >
+                            <input type="text" id="alterBstate" name="alterBstate" value="" >
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="alterType" class="am-u-sm-3 am-form-label">调动类型 </label>
+                        <div class="am-u-sm-9" style="text-align: left;padding-left: 15px;">
+                            <select id="alterType" name="alterType" style="color: gray;padding-left: 5px;font-size: 15px;">
+                                <option value="">请选择</option>
+                                <option value="1">晋升</option>
+                                <option value="2">降职</option>
+                            </select>
+                            <small></small>
+                        <%--<input type="radio" id="promote" name="changeType" value="1" checked>晋升&nbsp;&nbsp;--%>
+                            <%--<input type="radio" id="demotion" name="changeType" value="2">降职--%>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="alterTime" class="am-u-sm-3 am-form-label">调动日期<span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="alterTime" name="alterTime" class="am-form-field tpl-form-no-bg"
+                                   value=""  placeholder="请选择调令生效日期" data-am-datepicker=""  required/>
+                            <fm:errors path="alterTime"></fm:errors>
+                            <small></small>
+                        </div>
+                    </div>
+
+                   <%-- <div class="am-form-group">
+                        <label for="post" class="am-u-sm-3 am-form-label">部门变动</label>
+                        <div class="am-u-sm-9">
+                            <select id="post" style="color: gray;padding-left: 5px;font-size: 15px;">
+                                <option value="">变动后部门</option>
+                                <option value="">变动后部门</option>
+                                <option value="">变动后部门</option>
+                            </select>
+                        </div>
+                    </div>--%>
+                    <div class="am-form-group">
+                        <label for="alterEstate" class="am-u-sm-3 am-form-label">变动后岗位</label>
+                        <div class="am-u-sm-9" >
+                            <select id="alterEstate" name="alterEstate" style="color: gray;padding-left: 5px;font-size: 15px;">
+                                <option value="">请选择</option>
+                                <option value="董事长">董事长</option>
+                                <option value="总监">总监</option>
+                                <option value="经理">经理</option>
+                                <option value="主管">主管</option>
+                                <option value="员工">员工</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="alterContent" class="am-u-sm-3 am-form-label">备注</label>
+                        <div class="am-u-sm-9">
+                            <textarea class="" rows="5" id="alterContent" name="alterContent" placeholder="请输入关于该员工的人事变动说明"></textarea>
+                            <fm:errors path="alterContent"></fm:errors>
+                            <small></small>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="button" class="am-btn am-btn-primary" id="saveBtn">保存</button>
+                            <button type="button" class="am-btn am-btn-primary" id="goBack">返回</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+${hello}
+<%@include file="common/foot.jsp"%>

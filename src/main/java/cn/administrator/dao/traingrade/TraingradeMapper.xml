@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.administrator.dao.traingrade.TraingradeMapper">
+  <!--  <resultMap id="traintype" type="cn.administrator.pojo.Traintype">
+        <result property="typeName" column="e.type_name"/>
+    </resultMap>-->
+    <resultMap id="train" type="cn.administrator.pojo.Train">
+        <result property="trainName" column="train_name"/>
+        <result property="typeCode" column="type_code"/>
+        <result property="trainBtime" column="train_btime"/>
+        <result property="trainEtime" column="train_etime"/>
+    </resultMap>
+    <resultMap id="staff" type="staff">
+        <result property="pId" column="s.p_id"/>
+        <result property="pName" column="s.p_name"/>
+    </resultMap>
+    <resultMap id="traingrade" type="cn.administrator.pojo.Traingrade">
+        <result property="gradeId" column="grade_id"/>
+        <result property="trainId" column="train_id"/>
+        <result property="grade" column="grade"/>
+        <result property="subject" column="subject"/>
+        <result property="getCer" column="get_cer"/>
+        <association property="traintype" javaType="traintype" >
+            <result property="typeName" column="type_name"/>
+        </association>
+        <association property="train" javaType="train">
+            <result property="trainName" column="train_name"/>
+            <result property="typeCode" column="type_code"/>
+            <result property="trainBtime" column="train_btime"/>
+            <result property="trainEtime" column="train_etime"/>
+        </association>
+        <association property="staff" javaType="staff">
+            <result property="pId" column="p_id"/>
+            <result property="pName" column="p_name"/>
+        </association>
+
+    </resultMap>
+
+    <insert id="add">
+        insert into traingrade(train_id, p_id, grade, subject, get_cer)
+        value (#{trainId},#{pId},#{grade},#{subject},#{getCer})
+    </insert>
+    <select id="getAllTraingrade" resultMap="traingrade">
+      SELECT * from traingrade as g
+        INNER JOIN train as t on(g.train_id=t.train_id)
+        INNER JOIN staff as s on(g.p_id=s.p_id)
+        INNER JOIN traintype as e on(e.type_code=t.type_code)
+        <where>
+            <if test="name!=null and name!=''">
+                p_name like concat ('%',#{name},'%')
+            </if>
+            <if test="gradeId!=null and gradeId!=0">
+                and  grade_id=#{gradeId}
+            </if>
+        </where>
+    </select>
+    <delete id="delGradeById">
+        delete from traingrade where grade_id=#{gradeId}
+    </delete>
+    <update id="update">
+        update traingrade
+        <set>
+            <if test="trainId!=null and trainId!=0">train_id=#{trainId},</if>
+            <if test="pId!=null and pId!=0">p_id=#{pId},</if>
+            <if test="grade!=null and grade &gt;= 0">grade=#{grade},</if>
+            <if test="subject!=null and subject!=''">subject=#{subject},</if>
+            <if test="getCer!=null and getCer!=''">get_cer="yes",</if>
+            <if test="getCer==null or getCer==''">get_cer = "no",</if>
+        </set>
+        where grade_id=#{gradeId}
+    </update>
+</mapper>

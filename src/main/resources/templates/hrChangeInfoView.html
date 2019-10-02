@@ -1,0 +1,190 @@
+
+<!doctype html>
+<%@include file="common/head.jsp"%>
+<%--<script !src="">
+    var apName=null;
+    var alterTime=null;
+    var alterContent=null;
+    var alterBstate=null;
+    var alterEstate=null;
+    var alterType=null;
+    var saveBtn=null;
+    var goBack=null;
+    $(document).ready(function() {
+        apName=$("#apName");
+        alterTime=$("#alterTime");
+        alterContent=$("#alterContent");
+        alterType=$("#alterType");
+        alterBstate=$("#alterBstate");
+        alterEstate=$("#alterEstate");
+        saveBtn=$("#saveBtn");
+        goBack=$("#goBack");
+        apName.on("blur",function () {
+            if(apName.val()==null||apName.val()==""){
+                apName.next().html("---员工姓名必填！！---")
+                apName.next().addClass("errorRed");
+            }else{
+                // $.ajax({
+                //
+                // })
+            }
+        }).on("focus",function () {
+            apName.next().html("")
+        });
+        alterTime.on("blur",function () {
+            if(alterTime.val()==null){
+                alterTime.next().html("---变动生效时间必填---");
+                alterTime.next().addClass("errorRed");
+            }
+        }).on("focus",function () {
+            alterTime.next().html("");
+        });
+        alterType.on("blur",function () {
+            if(alterType.val()==null||alterType.val()==""){
+                alterType.next().html("---调动类型必选---");
+                alterType.next().addClass("errorRed");
+            }
+        }).on("focus",function () {
+            alterType.next().html("");
+
+        })
+        alterEstate.on("blur",function () {
+            if(alterEstate.val()==null||alterEstate.val()==""){}
+            alterEstate.next().html("---变动后职位必填---");
+            alterEstate.next().addClass("errorRed");
+        }).on("focus",function () {
+            alterEstate.next().html("");
+        })
+        alterContent.on("blur",function () {
+            if(alterContent.val()==null||alterContent.val()==""){
+                alterContent.next().html("---变动生效时间必填---");
+                alterContent.next().addClass("errorRed");
+            }
+        }).on("focus",function () {
+            alterContent.next().html("");
+        });
+        goBack.on("click",function () {
+            history.back(-1)
+        });
+        saveBtn.on("click",function () {
+            if(confirm("确认发布此条人事变动消息吗？")){
+                $.ajax({
+                    url:"${pageContext.request.contextPath}/inform/changeInfoAddSave",
+                    data:{"apName":apName.val(),"alterBstate":alterBstate.val(),
+                        "alterType":alterType.val(),"alterTime":alterTime.val(),
+                        "alterEstate":alterEstate.val(),"alterContent":alterContent.val()},
+                    dataType:"json",
+                    type:"post",
+                    success:function (data) {
+                        if(data.flag){
+                            if(confirm("发送成功！")){
+                                window.location.href="${pageContext.request.contextPath}/inform/hrChangeInfoShow.html";
+                            }
+                        }else{
+                            alert("发送失败！请按照以下要求发布通知！");
+                        }
+                        if(data.errors!=null) {
+                            for (var i = 0; i < data.errors.length; i++) {
+                                alert(data.errors[i].defaultMessage);
+                            }
+                        }
+                    }
+                })
+                return false;
+            }
+        })
+
+    })
+</script>--%>
+<<script !src="">
+    $(document).ready(function() {
+        $("#goBack").on("click",function() {
+            history.back(-1);
+        })
+    })
+
+</script>
+<div class="tpl-content-page-title" style="height: 500px;text-align: center">
+    <div class="portlet-title">
+        <div class="caption font-green bold">
+            <span>人事变动系统 > 人事变动消息查看</span>
+        </div>
+        <div class="tpl-portlet-input tpl-fz-ml">
+            <div class="portlet-input input-small input-inline">
+                <div class="input-icon right">
+                    <i class="am-icon-search"></i>
+                    <input type="text" class="form-control form-control-solid" placeholder="搜索..."> </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="tpl-block ">
+
+        <div class="am-g tpl-amazeui-form">
+            <div class="am-u-sm-12 am-u-md-9">
+                <form class="am-form am-form-horizontal" action="javascript:;" method="post">
+                    <div class="am-form-group">
+                        <label for="apName" class="am-u-sm-3 am-form-label">员工姓名</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="apName" name="apName" value="${staffalter.apName}" readonly>
+                            <input type="hidden" id="apId" name="apId" value="${staffalter.apId}">
+                            <small></small>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="alterBstate" class="am-u-sm-3 am-form-label">现任岗位</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="alterBstate" name="alterBstate" value="${staffalter.alterBstate}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="alterType" class="am-u-sm-3 am-form-label">调动类型 </label>
+                        <div class="am-u-sm-9" style="text-align: left;padding-left: 16px;">
+                            <c:if test="${staffalter.alterType==1}">
+                                <input type="text" id="alterType" name="alterType" value="升职" readonly>
+                            </c:if>
+                            <c:if test="${staffalter.alterType==2}">
+                                <input type="text" id="alterType" name="alterType" value="降职" readonly>
+                            </c:if>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="alterTime" class="am-u-sm-3 am-form-label">调动日期<span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="alterTime" name="alterTime" class="am-form-field tpl-form-no-bg"
+                                   value="<fmt:formatDate value="${staffalter.alterTime}" pattern="yyyy-MM-dd"/>" readonly/>
+                            <fm:errors path="alterTime"></fm:errors>
+                            <small></small>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="alterEstate" class="am-u-sm-3 am-form-label">变动后岗位</label>
+                        <div class="am-u-sm-9" >
+                            <input type="text" id="alterEstate" name="alterEstate" value="${staffalter.alterEstate}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="alterContent" class="am-u-sm-3 am-form-label">备注</label>
+                        <div class="am-u-sm-9">
+                            <textarea class="" rows="5" id="alterContent" name="alterContent" readonly>${staffalter.alterContent}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="button" class="am-btn am-btn-primary" id="goBack">返回</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+${hello}
+<%@include file="common/foot.jsp"%>

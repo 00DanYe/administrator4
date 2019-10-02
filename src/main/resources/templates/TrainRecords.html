@@ -1,0 +1,151 @@
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+       $(".edit").on("click",function () {
+            window.location.href="/train/editTrainRecords.html/"+$(this).attr("gradeId");
+
+           return false;
+       })
+
+        $(".del").on("click",function () {
+          if(confirm("确认删除该条记录吗？")){
+              var gradeId=$(this).attr("gradeId");
+              $.ajax({
+                  url:"/train/delgrade",
+                  data:"gradeId="+gradeId,
+                  type:"delete",
+                  dataType:"text",
+                  success:function (data) {
+                      alert(data);
+                      window.location.reload();
+                  }
+              })
+          }
+        })
+
+
+        $("#nextPage").click(function () {
+            var page=$("#nextPage").attr("page");
+            window.location.href="/train/TrainRecords.html?page="+page;
+        })
+        $("#previousPage").click(function () {
+            var page=$("#previousPage").attr("page");
+            window.location.href="/train/TrainRecords.html?page="+page;
+        })
+        $("#go").on("click",function () {
+            var page=$("#page").val();
+
+            if(page==null||isNaN(parseInt(page))){
+                alert("请输入正确的数字！");
+            }else if(parseInt(page)<1){
+                alert("跳转页面不得小于1！");
+
+            }else if(parseInt(page)>parseInt([[${pageNumber}]])){
+
+                alert("跳转页面不得大于总页面数！");
+            }else {
+                window.location.href="/train/TrainRecords.html?page="+page;;
+            }
+        })
+    $("#name").on("click",function () {
+        var name=$("input[name=name]").val();
+
+            window.location.href="/train/TrainRecords.html?name="+name;
+    })
+
+    })
+</script>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace ="common/head :: head"></div>
+<div class="portlet-title">
+    <div class="caption font-green bold">
+
+        培训系统>员工培训记录
+    </div>
+</div>
+
+    <div class="tpl-block">
+        <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-6">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <a href="/train/addTrainRecords.html"  class="am-btn-group am-btn-group-xs" >
+                        <button type="button" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="tpl-block">
+                    <div class="am-u-sm-12 am-u-md-3">
+
+                    </div>
+            <div class="am-u-sm-12 am-u-md-3">
+                <div class="am-input-group am-input-group-sm">
+                    <input name="name" type="text" class="am-form-field"   placeholder="输入员工姓名" >
+                    <span class="am-input-group-btn">
+            <button id="name" class="am-btn  am-btn-default am-btn-success tpl-am-btn-success am-icon-search" type="button"></button>
+          </span>
+                </div>
+            </div>
+        </div>
+        <div class="am-g">
+            <div class="am-u-sm-12">
+                <form class="am-form">
+                    <table class="am-table am-table-striped am-table-hover table-main" style="text-align: center">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center" class="table-title">员工姓名</th>
+                            <th style="text-align: center" class="table-type">项目名称</th>
+                            <th style="text-align: center" class="table-author am-hide-sm-only">课程名称</th>
+                            <th style="text-align: center" class="table-author am-hide-sm-only">培训类型</th>
+                            <th style="text-align: center" class="table-author am-hide-sm-only">培训时间</th>
+                            <th style="text-align: center" class="table-date am-hide-sm-only">成绩</th>
+                            <th style="text-align: center" class="table-set">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="grades" items="${traingrades}" >
+                        <tr th:each="grades:${traingrades}">
+                            <td class="am-hide-sm-only" th:text="${grades.staff.PName}"></td>
+                            <td class="am-hide-sm-only" th:text="${grades.train.trainName}"></td>
+                            <td class="am-hide-sm-only" th:text="${grades.subject}"></td>
+                            <td class="am-hide-sm-only" th:text="${grades.traintype.typeName}"></td>
+                            <td class="am-hide-sm-only"><span th:text="${grades.train.trainBtime}"></span>至<span th:text="${grades.train.trainEtime}"></span></td>
+                            <td class="am-hide-sm-only" th:text="${grades.grade}"></td>
+
+                            <td>
+                                <div class="am-btn-toolbar" style="display: inline-block">
+                                    <div class="am-btn-group am-btn-group-xs">
+                                       <button th:attr="gradeId=${grades.gradeId}" class="edit am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                        <button  th:attr="gradeId=${grades.gradeId}"  class="del am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </c:forEach>
+
+                    </tbody>
+                </table>
+                <hr>
+
+            </form>
+        </div>
+            <div style="float: right;margin-right: 30px;"  id="sorter">
+                <span id="show1" th:text="${page}"></span>/<span id="show2" th:text="${pageNumber}"></span>
+                <span th:if="(${page}>1)">
+                    <a href="javascript:;" page="${page-1}" id="previousPage">上一页</a>
+                </span>
+                <span th:if="${page<pageNumber}">
+                    <a href="javascript:;" page="${page+1}" id="nextPage">下一页</a>
+               </span>
+                <span th:if="${pageNumber>1}">
+                    <span style="padding:0px 10px 0px 20px;">跳转至</span>
+                    <input type=" text" id="page" style="width: 40px;border: #1a1a1a 1px solid;">
+                    <span style="padding:0px 10px 0px 10px;">页</span>
+                    <input type="button" id="go" value="GO">
+                </span>
+            </div>
+    </div>
+</div>
+        <div th:replace="common/foot :: foot"></div>

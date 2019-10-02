@@ -1,0 +1,165 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace ="common/head :: head"></div>
+<style type="text/css">
+    td{
+        text-align: center;
+    }
+    th{
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function($) {
+        $(".modify").on("click",function () {
+            var pId = $(this).attr("pId");
+            window.location.href="${pageContext.request.contextPath}/staff/modifyStaff.html?pId="+pId;
+            return false;
+        });
+        $(".delete").on("click",function () {
+            var pId = $(this).attr("pId");
+            var parent = $(this).parents("tr");
+            if (confirm("确定要删除该条信息吗？")){
+                $.ajax({
+                    url:"${pageContext.request.contextPath}/staff/deleteStaff",
+                    type:"post",
+                    dataType:"json",
+                    data:"pId="+pId,
+                    success:function (data) {
+                        if (data.flag) {
+                            parent.remove();
+                            alert("删除成功！");
+                        }else {
+                            alert("删除失败！");
+                        }
+                    },
+                    error:function () {
+                        alert("未知错误");
+                    }
+                })
+            }
+            return false;
+        });
+        $("#search").on("click",function () {
+            var name = $("#name").val();
+            window.location.href="${pageContext.request.contextPath}/staff/viewAllStaff.html?pName="+name;
+        })
+    })
+</script>
+<div class="portlet-title">
+    <div class="caption font-green bold">
+        人员系统>员工列表
+    </div>
+    <div class="tpl-portlet-input tpl-fz-ml">
+        <div class="portlet-input input-small input-inline">
+
+        </div>
+    </div>
+</div>
+<div class="tpl-block" style="height: 603px" >
+    <div class="am-g">
+    <!--    <%&#45;&#45;<div class="am-u-sm-12 am-u-md-6">
+            <div class="am-btn-toolbar">
+                <div class="am-btn-group am-btn-group-xs">
+                    <button type="button" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</button>
+                    <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 保存</button>
+                    <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span> 审核</button>
+                    <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                </div>
+            </div>
+        </div>&#45;&#45;%>-->
+        <div class="am-u-sm-12 am-u-md-3">
+       <!--     <%&#45;&#45;<div class="am-form-group">
+                <select data-am-selected="{btnSize: 'sm'}">
+                    <option value="option1">所有类别</option>
+                    <option value="option2">IT业界</option>
+                    <option value="option3">数码产品</option>
+                    <option value="option3">笔记本电脑</option>
+                    <option value="option3">平板电脑</option>
+                    <option value="option3">只能手机</option>
+                    <option value="option3">超极本</option>
+                </select>
+            </div>&#45;&#45;%>-->
+        </div>
+        <div class="am-u-sm-12 am-u-md-3">
+            <div class="am-input-group am-input-group-sm">
+                <input type="text" class="am-form-field" id="name" placeholder="输入姓名查询">
+                <span class="am-input-group-btn">
+            <button class="am-btn  am-btn-default am-btn-success tpl-am-btn-success am-icon-search" id="search"
+                    type="button"></button>
+          </span>
+            </div>
+        </div>
+    </div>
+    <div class="am-g">
+        <div class="am-u-sm-12">
+            <form class="am-form">
+                <table class="am-table am-table-striped am-table-hover table-main">
+                    <thead>
+                    <tr>
+                        <th class="table-title">员工编号</th>
+                        <th class="table-title">姓名</th>
+                        <th class="table-type">性别</th>
+                        <th class="table-author am-hide-sm-only">学历</th>
+                        <th class="table-date am-hide-sm-only">部门</th>
+                        <th class="table-date am-hide-sm-only">职位</th>
+                        <th class="table-date am-hide-sm-only">工作状态</th>
+                        <th class="table-set">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="staff:${staffList}">
+                            <td th:text="${staff.PId}"></td>
+                            <td th:text="${staff.PName}"></td>
+                            <td th:text="${staff.sex}"></td>
+                            <td class="am-hide-sm-only" th:text="${staff.degree}"></td>
+                            <td class="am-hide-sm-only" th:text="${staff.department}"></td>
+                            <td class="am-hide-sm-only" th:text="${staff.position}"></td>
+                            <td class="am-hide-sm-only" th:text="${staff.state}"></td>
+                            <td>
+                                <div class="am-btn-toolbar" style="display: inline-block">
+                                    <div class="am-btn-group am-btn-group-xs">
+                                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary modify"
+                                                pId="${staff.PId}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                        <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only delete"
+                                                pId="${staff.PId}"><span class="am-icon-trash-o"></span> 删除</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <div class="am-cf">
+
+                    <div class="am-fr">
+                        <ul class="am-pagination tpl-pagination">
+                           <!-- <c:if test="${page!=1}">
+                                <li><a href="${pageContext.request.contextPath }/staff/viewAllStaff.html?pageIndex=${page-1}">«</a></li>
+                            </c:if>
+                            <c:forEach begin="1" end="${totalPage}" varStatus="i">
+                                <c:choose>
+                                    <c:when test="${page==i.index}">
+                                        <li class="am-active"><a href="${pageContext.request.contextPath }/staff/viewAllStaff.html?pageIndex=${i.index}">${i.index}</a></li>
+                                    </c:when>
+                                    <c:when test="${page!=i.index}">
+                                        <li><a href="${pageContext.request.contextPath }/staff/viewAllStaff.html?pageIndex=${i.index}">${i.index}</a></li>
+                                    </c:when>
+                                </c:choose>
+                            </c:forEach>
+                            <c:if test="${page!=totalPage}">
+                                <li><a href="${pageContext.request.contextPath }/staff/viewAllStaff.html?pageIndex=${page+1}">»</a></li>
+                            </c:if>-->
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+<div th:replace="common/foot :: foot"></div>

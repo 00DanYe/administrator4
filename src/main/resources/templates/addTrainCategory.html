@@ -1,0 +1,169 @@
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace ="common/head :: head"></div>
+
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#button").click(function () {
+            $("#submit").show();
+            $("input[name=typeName]").removeAttr("readonly");
+            $("input[name=typeCode]").removeAttr("readonly");
+            $("textarea").removeAttr("readonly");
+            $("input[name=typeName]").val("");
+            $("input[name=typeCode]").val("");
+            $("textarea").val("");
+        })
+     var typeCode=$("select").val();
+       $("input[name=typeName]").on("blur",function () {
+            var typeName=$(this).val();
+            if(typeName==""){
+                alert("培训类型不能为空！");
+            }else {
+                $.ajax({
+                    url:"/train/typeName",
+                    data:{"typeName":typeName},
+                    type:"get",
+                    dataType:"json",
+                    success:function (data) {
+                        if(data.flag){
+                            alert("此类型已存在，无法添加！");
+                        }
+                    }
+                })
+            }
+       })
+        $("input[name=typeCode]").on("blur",function () {
+            var typeCode=$(this).val();
+            if(typeCode==""){
+                alert("培训编号不能为空！");
+            }else {
+                $.ajax({
+                    url:"/train/typedetail",
+                    data:{"typeCode":typeCode},
+                    type:"get",
+                    dataType:"json",
+                    success:function (data) {
+                        if(data!=null){
+                            alert("此类型编号已存在，无法添加！");
+                        }
+                    }
+                })
+            }
+        })
+        $("textarea").on("blur",function () {
+            if($(this).val()==""){
+                alert("培训内容不能为空！")
+            }
+        })
+     $.ajax({
+         url:"/train/typedetail",
+            data:{"typeCode":typeCode},
+            type:"get",
+            dataType:"json",
+            success:function (data) {
+
+                $("input[name=typeName]").val(data.typeName);
+                $("input[name=typeCode]").val(data.typeCode);
+                $("textarea").val(data.typeInfo);
+            }
+        })
+        $("select").change(function () {
+            var typeCode=$(this).val();
+            $.ajax({
+                url:"/train/typedetail",
+                data:{"typeCode":typeCode},
+                type:"get",
+                dataType:"json",
+                success:function (data) {
+                    $("#submit").hide();
+                    $("input[name=typeName]").attr("readonly","readonly");
+                    $("input[name=typeCode]").attr("readonly","readonly");
+                    $("textarea").attr("readonly","readonly");
+                    $("input[name=typeName]").val(data.typeName);
+                    $("input[name=typeCode]").val(data.typeCode);
+                    $("textarea").val(data.typeInfo);
+                }
+            })
+        })
+        $("#submit").click(function () {
+
+            $.ajax({
+                url:"/train/addTrainCategory.do",
+                data:{"typeCode":$("input[name=typeCode]").val(),
+                    "typeName":$("input[name=typeName]").val(),
+                    "typeInfo":$("textarea").val()},
+                type:"post",
+                dataType:"json",
+                success:function (data) {
+                    if(data.flag){
+                        alert("添加成功！");
+                        window.location.reload();
+                    }else{
+                        alert("添加失败！");
+                    }
+                        if(data.errors!=null) {
+                            for (var i = 0; i < data.errors.length; i++) {
+                                alert(data.errors[i].defaultMessage);
+                            }
+                        }
+
+
+                }
+            })
+        })
+    })
+</script>
+
+<div class="portlet-title" style="text-align: center;">
+    <div class="caption font-green bold">
+        培训系统> 添加公司培训类别
+    </div>
+</div>
+    <div class="am-u-sm-12 am-u-md-9" style="text-align: center;height: 600px;">
+
+            <div class="am-form-group" style="margin: 50px 10px 30px;">
+
+                <select name="type" data-am-selected="{btnSize: 'sm'}" style="display: none;float: left" >
+                    <option th:each="traintype:${traintypeList}" th:value="${traintype.typeCode}" th:text="${traintype.typeCode}" selected="selected"></option>
+
+                </select>
+
+                    <button type="button" class="am-btn am-btn-primary" id="button" style="float: right">添加类别</button>
+
+            </div>
+
+
+        <form class="am-form am-form-horizontal" method="post" action="javascript:;">
+            <div class="am-form-group">
+                <label for="user-name" class="am-u-sm-3 am-form-label">培训类型</label>
+                <div class="am-u-sm-9">
+                    <input type="text" id="user-name" placeholder="请输入培训类型(必填)" name="typeName" readonly="readonly">
+                    <fm:errors path="typeName" cssStyle="color: red;"></fm:errors>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label  class="am-u-sm-3 am-form-label">培训编号</label>
+                <div class="am-u-sm-9">
+                    <input type="text"  placeholder="请输入培训编号(必填)" name="typeCode" readonly="readonly">
+                    <fm:errors path="typeCode" cssStyle="color: red;"></fm:errors>
+                </div>
+            </div>
+            <div class="am-form-group">
+                <label for="user-intro" class="am-u-sm-3 am-form-label">培训内容</label>
+                <div class="am-u-sm-9">
+                    <textarea class="" rows="5" id="user-intro" placeholder="~~~~~~~~~~~~请输入培训内容(必填)" name="typeInfo" readonly="readonly"></textarea>
+                    <fm:errors path="typeInfo" cssStyle="color: red;"></fm:errors>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <div class="am-u-sm-9 am-u-sm-push-3">
+                    <button type="submit" class="am-btn am-btn-primary" style="display: none" id="submit">确认添加</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<div th:replace="common/foot :: foot"></div>

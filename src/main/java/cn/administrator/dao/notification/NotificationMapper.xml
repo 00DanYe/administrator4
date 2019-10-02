@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.administrator.dao.notification.NotificationMapper">
+
+    <resultMap id="notification" type="cn.administrator.pojo.Notification">
+        <result property="notificationId" column="notification_id"/>
+        <result property="notificationContent" column="notification_content"/>
+        <result property="informDate" column="inform_date"/>
+        <result property="informTitle" column="inform_title"/>
+    </resultMap>
+   <insert id="addNotification" parameterType="cn.administrator.pojo.Notification">
+       insert into notification (notification_id, notification_content, inform_date, inform_title)
+       VALUES (#{notificationId},#{notificationContent},#{informDate},#{informTitle})
+   </insert>
+    <update id="updateNotification" parameterType="cn.administrator.pojo.Notification">
+        update notification
+        <set>
+          <if test="notificationContent!=null and notificationContent!=''">notification_content=#{notificationContent},</if>
+          <if test="informDate!=null">inform_date=#{informDate},</if>
+          <if test="informTitle!=null and informTitle!=''">inform_title=#{informTitle},</if>
+        </set>
+        where notification_id=#{notificationId}
+    </update>
+    <delete id="deleteNotification" parameterType="cn.administrator.pojo.Notification">
+        delete from notification where notification_id=#{id}
+    </delete>
+    <select id="getNotificationById" resultMap="notification">
+        select * from notification where notification_id=#{id}
+    </select>
+    <select id="getAllNotification" resultMap="notification">
+        select * from notification order by inform_date desc
+    </select>
+</mapper>

@@ -1,0 +1,96 @@
+
+<div th:replace ="common/head :: head"></div>
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+    })
+</script>
+
+<div class="portlet-title">
+    <div class="caption font-green bold">
+     培训系统>公司培训项目>培训详情
+    </div>
+
+</div>
+<div class="tpl-portlet-components">
+
+    <div class="tpl-block ">
+
+        <div class="am-g tpl-amazeui-form">
+
+
+            <div class="am-u-sm-12 am-u-md-9">
+                <c:forEach var="trains" items="${trains}" >
+                <form class="am-form am-form-horizontal" th:each="trains:${trains}">
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">培训项目</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="user-name" value="" th:value="${trains.trainName}"  readonly="readonly">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-email" class="am-u-sm-3 am-form-label">培训类型</label>
+                        <div class="am-u-sm-9">
+                            <input type="email" id="user-email" value="" th:value="${trains.traintype.typeName}" readonly="readonly">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-phone" class="am-u-sm-3 am-form-label">培训费</label>
+                        <div class="am-u-sm-9">
+                            <input type="tel" id="user-phone" value="" th:value="${trains.trainExpense}" readonly="readonly">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label  class="am-u-sm-3 am-form-label">培训主持</label>
+                        <div class="am-u-sm-9">
+                            <input type="text"  value="" th:value="${trains.trainHost}" readonly="readonly">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-weibo" class="am-u-sm-3 am-form-label">培训老师</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="user-weibo" value="" th:value="${trains.trainMaster}" readonly="readonly">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-weibo" class="am-u-sm-3 am-form-label">培训地点</label>
+                        <div class="am-u-sm-9">
+                            <input type="text"  value="" th:value="${trains.trainLocation}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-weibo" class="am-u-sm-3 am-form-label">开始时间</label>
+                        <div class="am-u-sm-9">
+                            <input type="text"  value="" th:value="${trains.trainBtime}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-weibo" class="am-u-sm-3 am-form-label">结束时间</label>
+                        <div class="am-u-sm-9">
+                            <input type="text"  value="" th:value="${trains.trainEtime}" readonly="readonly">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-intro" class="am-u-sm-3 am-form-label">培训详细内容</label>
+                        <div class="am-u-sm-9">
+                            <textarea class="" rows="5" id="user-intro" readonly="readonly" th:value="${trains.traintype.typeInfo}"></textarea>
+                        </div>
+                    </div>
+
+
+                </form>
+                </c:forEach>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="common/foot :: foot"></div>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.administrator.dao.staffalter.StaffalterMapper">
+    <resultMap id="staffalter" type="cn.administrator.pojo.Staffalter">
+        <result property="apId" column="ap_id"/>
+        <result property="alterId" column="alter_id"/>
+        <result property="apName" column="ap_name"/>
+        <result property="alterTime" column="alter_time"/>
+        <result property="alterBstate" column="alter_bstate"/>
+        <result property="alterEstate" column="alter_estate"/>
+        <result property="alterType" column="alter_type"/>
+        <result property="alterContent" column="alter_content"/>
+    </resultMap>
+    <insert id="addStaffalter" parameterType="cn.administrator.pojo.Staffalter">
+        insert into staffalter (alter_id, ap_id, ap_name, alter_time,alter_bstate,alter_estate,alter_type,alter_content)
+        VALUES (#{alterId},#{apId},#{apName},#{alterTime},#{alterBstate},#{alterEstate},#{alterType},#{alterContent})
+    </insert>
+    <update id="updateStaffalter" parameterType="cn.administrator.pojo.Staffalter">
+        update staffalter
+        <set>
+            <if test="apId!=null and apId!=''">ap_id=#{apId},</if>
+            <if test="apName!=null and apName!=''">ap_name=#{apName},</if>
+            <if test="alterTime!=null">alter_time=#{alterTime},</if>
+            <if test="alterBstate!=null and alterBstate!=''">alter_bstate=#{alterBstate},</if>
+            <if test="alterEstate!=null and alterEstate!=''">alter_estate=#{alterEstate},</if>
+            <if test="alterType!=null and alterType!=''">alter_type=#{alterType},</if>
+            <if test="alterContent!=null and alterContent!=''">alter_content=#{alterContent},</if>
+        </set>
+        where alter_id=#{alterId}
+    </update>
+    <delete id="deleteStaffalter" parameterType="cn.administrator.pojo.Staffalter">
+        delete from staffalter where alter_id=#{id}
+    </delete>
+    <select id="getStaffalterById" resultMap="staffalter">
+        select * from staffalter where alter_id=#{id}
+    </select>
+    <select id="getAllStaffalter" resultMap="staffalter">
+        select * from staffalter order by alter_time desc
+    </select>
+</mapper>

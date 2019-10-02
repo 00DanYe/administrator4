@@ -1,0 +1,112 @@
+
+<div th:replace ="common/head :: head"></div>
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".edit").on("click",function () {
+            alert($(this).attr("gradeId"));
+        })
+
+
+        $("#nextPage").click(function () {
+            var page=$("#nextPage").attr("page");
+            window.location.href="/train/StaffCert.html?page="+page;
+        })
+        $("#previousPage").click(function () {
+            var page=$("#previousPage").attr("page");
+            window.location.href="/train/StaffCert.html?page="+page;
+        })
+        $("#go").on("click",function () {
+            var page=$("#page").val();
+            if(page==null||isNaN(parseInt(page))){
+                alert("请输入正确的数字！");
+            }else if(parseInt(page)<1){
+                alert("跳转页面不得小于1！");
+            }else if(parseInt(page)>parseInt($("#show2").html())){
+
+                alert("跳转页面不得大于总页面数！");
+            }else {
+                window.location.href="/train/StaffCert.html?page="+page;;
+            }
+        })
+
+        $("#name").on("click",function () {
+            var name=$("input[name=name]").val();
+            alert(name)
+            window.location.href="/train/StaffCert.html?name="+name;
+
+        })
+
+    })
+</script>
+<div class="portlet-title">
+    <div class="caption font-green bold">
+        培训系统>员工证书查看
+    </div>
+</div>
+
+<div class="tpl-block">
+    <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6">
+
+        </div>
+        <div class="tpl-block">
+            <div class="am-u-sm-12 am-u-md-3">
+
+            </div>
+            <div class="am-u-sm-12 am-u-md-3">
+                <div class="am-input-group am-input-group-sm">
+                    <input name="name" type="text" class="am-form-field"  placeholder="输入员工姓名" >
+                    <span class="am-input-group-btn">
+            <button id="name" class="am-btn  am-btn-default am-btn-success tpl-am-btn-success am-icon-search" type="button"></button>
+          </span>
+                </div>
+            </div>
+        </div>
+        <div class="am-g">
+            <div class="am-u-sm-12">
+                <form class="am-form">
+                    <table class="am-table am-table-striped am-table-hover table-main" >
+                        <thead>
+                        <tr >
+                            <th class="table-title">员工姓名</th>
+                            <th class="table-type">项目名称</th>
+                            <th class="table-author am-hide-sm-only">课程名称</th>
+                            <th class="table-date am-hide-sm-only">成绩</th>
+                            <th class="table-author am-hide-sm-only">证书名称</th>
+                            <th class="table-author am-hide-sm-only">发证日期</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="staffcerts:${staffcerts}">
+                            <td class="am-hide-sm-only" th:text="${staffcerts.staff.PName}"></td>
+                            <td class="am-hide-sm-only" th:text="${staffcerts.train.trainName}"></td>
+                            <td class="am-hide-sm-only" th:text="${staffcerts.traingrade.subject}"></td>
+                            <td class="am-hide-sm-only" th:text="${staffcerts.traingrade.grade}"></td>
+                            <td class="am-hide-sm-only" th:text="${staffcerts.cerName}"></td>
+                            <td class="am-hide-sm-only" th:text="${#dates.format(staffcerts.cerDate,'yyyy-MM-dd')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                </form>
+            </div>
+            <div style="float: right;margin-right: 30px;"  id="sorter">
+                <span id="show1" th:text="${page}"></span>/<span id="show2" th:text="${pageNumber}"></span>
+                <span th:if="${page}>1">
+                    <a href="javascript:;" th:attr="page=${page-1}" id="previousPage">上一页</a>
+                </span>
+                <span th:if="${page}< ${pageNumber}">
+                    <a href="javascript:;" th:attr="page=${page+1}" id="nextPage">下一页</a>
+                </span>
+                <span th:if="${pageNumber}>1">
+                    <span style="padding:0px 10px 0px 20px;">跳转至</span>
+                    <input type=" text" id="page" style="width: 40px;border: #1a1a1a 1px solid;">
+                    <span style="padding:0px 10px 0px 10px;">页</span>
+                    <input type="button" id="go" value="GO">
+                </span>
+            </div>
+        </div>
+    </div>
+    <div th:replace="common/foot :: foot"></div>

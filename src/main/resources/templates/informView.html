@@ -1,0 +1,59 @@
+
+<!doctype html>
+
+<%@include file="common/head.jsp"%>
+<script !src="">
+    $(document).ready(function() {
+        $("#goBack").on("click",function() {
+            history.back(-1);
+    })
+})
+</script>
+<div class="tpl-content-page-title" style="height: 500px;text-align: center">
+    <div class="portlet-title">
+        <div class="caption font-green bold">
+            <span>事务通知系统</span> > 通知详情
+        </div>
+
+    </div>
+
+    <div class="tpl-block">
+
+        <div class="am-g">
+            <div class="tpl-form-body tpl-form-line">
+                <form  id="add" action="javascript:;" method="post" class="am-form tpl-form-line-form">
+                    <div class="am-form-group">
+                        <label for="informTitle" class="am-u-sm-3 am-form-label">通知标题 <span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" style="padding-left: 10px;" class="tpl-form-input" id="informTitle" name="informTitle" value="${notification.informTitle}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="informDate" class="am-u-sm-3 am-form-label">发布时间 <span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="informDate" name="informDate" class="am-form-field tpl-form-no-bg"
+                                   style="padding-left: 10px;"   value="<fmt:formatDate value="${notification.informDate}" pattern="yyyy-MM-dd"/>"  data-am-datepicker=""  readonly/>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="content" class="am-u-sm-3 am-form-label">通知内容</label>
+                        <div class="am-u-sm-9">
+                            <textarea  rows="10" style="padding-left: 10px;" id="content" name="notificationContent" readonly>${notification.notificationContent}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="button" id="goBack" class="am-btn am-btn-primary tpl-btn-bg-color-success ">返回</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%@include file="common/foot.jsp"%>

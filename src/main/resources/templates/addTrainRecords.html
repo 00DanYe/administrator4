@@ -1,0 +1,168 @@
+
+<div th:replace ="common/head :: head"></div>
+
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("input[name=pName]").on("blur",function () {
+            var pName=$(this).val();
+            $.ajax({
+                url:"/train/pNameBlur.html",
+                data:"pName="+pName,
+                dataType:"Json",
+                type:"get",
+                success:function (data) {
+                    if(!data.flag){
+                       alert("该员工不存在，无法为他添加培训记录。")
+                    }
+                }
+            })
+        })
+        $("input[name=trainName]").on("blur",function () {
+            var trainName=$(this).val();
+            $.ajax({
+                url:"/train/trainNameBlur.html",
+                data:"trainName="+trainName,
+                dataType:"Json",
+                type:"get",
+                success:function (data) {
+                    if(!data.flag){
+                        alert("该项目不存在，无法添加。")
+                    }
+                }
+            })
+        })
+        $("input[name=grade]").on("blur",function () {
+            if(isNaN($(this).val())){
+                alert("请输入数字")
+            }else if($(this).val()<0||$(this).val()>100){
+                alert("成绩在1-100分之间。")
+            }
+        })
+    })
+</script>
+<div th:if="${gradeId} == null">
+<div class="portlet-title">
+    <div class="caption font-green bold">
+        培训系统>增加培训记录
+    </div>
+</div>
+<div class="tpl-form-body tpl-form-line">
+    <p>&nbsp;</p>
+    <form modelAttribute="traingrade" method="post"  action="#" th:action="@{/train/addTrainRecords.do}" class="am-form tpl-form-line-form"  enctype="application/x-www-form-urlencoded">
+        <div class="am-form-group">
+            <label for="user-name" class="am-u-sm-3 am-form-label">姓名 <span class="tpl-form-line-small-title">name</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" name="pName" th:value="${pName}" required class="tpl-form-input" id="user-name" placeholder="请输入员工姓名（必填）">
+            </div>
+        </div>
+        <div>&nbsp;</div>
+        <div class="am-form-group">
+            <label for="user-phone" class="am-u-sm-3 am-form-label">项目名 <span class="tpl-form-line-small-title">project</span></label>
+            <div class="am-u-sm-9">
+                <input name="trainName" th:value="${trainName}" required type="text" placeholder="项目名（必填">
+            </div>
+        </div>
+        <div>&nbsp;</div>
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">课程 <span class="tpl-form-line-small-title">subject</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" th:value="${subject}" required name="subject" placeholder="输入课程名（必填）">
+                <fm:errors path="subject"/>
+            </div>
+        </div>
+        <div>&nbsp;</div>
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">成绩 <span class="tpl-form-line-small-title">grade</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" th:value="${grade}" required name="grade" placeholder="1-100的数字（必填）">
+                <fm:errors path="grade"/>
+            </div>
+        </div>
+        <span th:if="${error}!=null">
+            <script >
+                alert([[${error}]]);
+            </script>
+        </span>
+        <div>&nbsp;</div>
+        <div class="am-form-group">
+            <label for="user-phone" class="am-u-sm-3 am-form-label">证书 <span class="tpl-form-line-small-title"> certificate</span></label>
+            <div class="am-u-sm-9">
+                <input type="text" th:value="${cerName}"  name="getCer" placeholder="请输入证书名称">
+            </div>
+        </div>
+        <div class="am-form-group">
+            <div class="am-u-sm-9 am-u-sm-push-3">
+                <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+            </div>
+        </div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+    </form>
+</div>
+</div>
+<div th:if="${gradeId}!=null">
+    <div class="portlet-title">
+        <div class="caption font-green bold">
+
+            培训系统>员工培训记录>修改培训记录
+        </div>
+    </div>
+    <div class="tpl-form-body tpl-form-line">
+        <p>&nbsp;</p>
+
+        <form th:each="traingrades,i:${traingrades}"  method="post" action="#" th:action="@{~/train/editTrainRecords.do}" class="am-form tpl-form-line-form"  enctype="application/x-www-form-urlencoded">
+            <div class="am-form-group">
+                <label for="user-name" class="am-u-sm-3 am-form-label">姓名 <span class="tpl-form-line-small-title">name</span></label>
+                <div class="am-u-sm-9">
+                    <input type="text" name="pName" th:value="${traingrades.staff.PName}" required class="tpl-form-input" id="user-name" placeholder="请输入员工姓名（必填）">
+                </div>
+            </div>
+            <div>&nbsp;</div>
+            <div class="am-form-group">
+                <label for="user-phone" class="am-u-sm-3 am-form-label">项目名 <span class="tpl-form-line-small-title">project</span></label>
+                <div class="am-u-sm-9">
+                    <input name="trainName" th:value="${traingrades.train.trainName}" required type="text" placeholder="项目名（必填）">
+                </div>
+            </div>
+            <div>&nbsp;</div>
+            <div class="am-form-group">
+                <label class="am-u-sm-3 am-form-label">课程 <span class="tpl-form-line-small-title">subject</span></label>
+                <div class="am-u-sm-9">
+                    <input type="text" th:value="${traingrades.subject}" required name="subject" placeholder="输入课程名（必填）">
+                    <fm:errors path="subject"/>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+            <div class="am-form-group">
+                <label class="am-u-sm-3 am-form-label">成绩 <span class="tpl-form-line-small-title">grade</span></label>
+                <div class="am-u-sm-9">
+                    <input type="text" th:value="${traingrades.grade}" required name="grade" placeholder="1-100的数字（必填）">
+                    <fm:errors path="grade"/>
+                </div>
+            </div>
+            <span th:if="${error}!=null">
+                <script>
+                    alert([[${error}]]);
+                </script>
+            </span>
+            <div>&nbsp;</div>
+            <div class="am-form-group">
+                <label for="user-phone" class="am-u-sm-3 am-form-label">证书 <span class="tpl-form-line-small-title"> certificate</span></label>
+                <div class="am-u-sm-9">
+                    <input type="text" th:value="${cerName}"  name="getCer" placeholder="请输入证书名称">
+                </div>
+            </div>
+            <div class="am-form-group">
+                <div class="am-u-sm-9 am-u-sm-push-3">
+                    <input type="hidden" name="gradeId"  value="${gradeId}">
+                    <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
+        </form>
+
+    </div>
+</div>
+<div th:replace="common/foot :: foot"></div>

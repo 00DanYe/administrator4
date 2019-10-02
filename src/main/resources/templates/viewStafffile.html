@@ -1,0 +1,84 @@
+
+<!doctype html>
+<%@include file="common/head.jsp"%>
+<script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function($) {
+        $("#back").on("click",function () {
+            window.history.back();
+        })
+    })
+</script>
+<div class="portlet-title">
+    <div class="caption font-green bold">
+       人员系统>员工档案列表>员工档案查看
+    </div>
+    <div class="tpl-portlet-input tpl-fz-ml">
+        <div class="portlet-input input-small input-inline">
+
+        </div>
+    </div>
+</div>
+<div class="tpl-block ">
+    <div class="am-g tpl-amazeui-form">
+        <div class="am-u-sm-12 am-u-md-9">
+            <form class="am-form am-form-horizontal">
+                <div class="am-form-group">
+                    <label for="pId" class="am-u-sm-3 am-form-label">员工编号 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="number" id="pId" value="${stafffile.PId}" readonly>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="pName" class="am-u-sm-3 am-form-label">员工姓名 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="pName" value="${stafffile.staff.PName}" readonly>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="sex" class="am-u-sm-3 am-form-label">性别 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="sex" value="${stafffile.staff.sex}" readonly>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="fileName" class="am-u-sm-3 am-form-label">档案名称 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="fileName" value="${stafffile.fileName}" readonly>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="fileAbstract" class="am-u-sm-3 am-form-label">档案摘要 :</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="fileAbstract" value="${stafffile.fileAbstract}" readonly>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="rewardNote" class="am-u-sm-3 am-form-label">奖惩记录 :</label>
+                    <div class="am-u-sm-9">
+                        <textarea class="" rows="5" id="rewardNote" readonly>${stafffile.rewardNote}</textarea>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="experience" class="am-u-sm-3 am-form-label">工作经验 :</label>
+                    <div class="am-u-sm-9">
+                        <textarea class="" rows="5" id="experience" readonly>${stafffile.experience}</textarea>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <div class="am-u-sm-9 am-u-sm-push-3">
+                        <button type="button" id="back" class="am-btn am-btn-primary">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<%@include file="common/foot.jsp"%>
